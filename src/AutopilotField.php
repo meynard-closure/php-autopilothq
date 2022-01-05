@@ -110,6 +110,7 @@ class AutopilotField
      * @param      $name
      * @param      $value
      * @param null $type
+     * @throws AutopilotException
      */
     public function __construct($name, $value, $type = null)
     {
@@ -146,8 +147,9 @@ class AutopilotField
      * @param null $cast
      *
      * @return null|string
+     * @throws Exception
      */
-    protected function setTypeByValue($type, $value, $cast = null)
+    protected function setTypeByValue($type, $value, $cast = null): ?string
     {
         // determine type before setting initial value
         if (! is_null($cast) && $cast !== 'readonly') {
@@ -166,7 +168,7 @@ class AutopilotField
      *
      * @return bool
      */
-    public function isReserved()
+    public function isReserved(): bool
     {
         return $this->isReserved;
     }
@@ -176,7 +178,7 @@ class AutopilotField
      *
      * @return bool
      */
-    public function isReadOnly()
+    public function isReadOnly(): bool
     {
         return $this->isReadOnly;
     }
@@ -186,7 +188,7 @@ class AutopilotField
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -196,7 +198,7 @@ class AutopilotField
      *
      * @return null|string
      */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
@@ -216,6 +218,7 @@ class AutopilotField
      *
      * @return null
      * @throws AutopilotException
+     * @throws Exception
      */
     public function setValue($value)
     {
@@ -241,7 +244,7 @@ class AutopilotField
      *
      * @return string
      */
-    public static function getFieldName($name)
+    public static function getFieldName($name): string
     {
         // check raw value against reserved
         if (in_array($name, self::$reservedFields)) {
@@ -299,7 +302,7 @@ class AutopilotField
      * @return string
      * @throws Exception
      */
-    protected function getTypeByValue($value)
+    protected function getTypeByValue($value): string
     {
         $type = gettype($value);
         if ($type === 'double') {
@@ -324,7 +327,10 @@ class AutopilotField
         return $type;
     }
 
-    protected function checkType($type)
+    /**
+     * @throws Exception
+     */
+    protected function checkType($type): bool
     {
         if (! in_array($type, self::$allowedTypes)) {
             throw new Exception('type "' . $type . '" is not a valid autopilot data type');
@@ -338,7 +344,7 @@ class AutopilotField
      *
      * @returns string
      */
-    public function formatName()
+    public function formatName(): string
     {
         return $this->isReserved() ? $this->name : $this->type . '--' . str_replace(' ', '--', $this->name);
     }
@@ -350,7 +356,7 @@ class AutopilotField
      *
      * @param $value
      *
-     * @return mixed
+     * @return array|string|string[]
      */
     protected static function toStudlyCase($value)
     {

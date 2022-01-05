@@ -36,7 +36,7 @@ class AutopilotContact implements JsonSerializable
      *
      * @return string|null
      */
-    public function __get($name)
+    public function __get($name): ?string
     {
         return $this->getFieldValue($name);
     }
@@ -49,7 +49,7 @@ class AutopilotContact implements JsonSerializable
      *
      * @return string|null
      */
-    public function __set($name, $value)
+    public function __set($name, $value): ?string
     {
         return $this->setFieldValue($name, $value);
     }
@@ -61,7 +61,7 @@ class AutopilotContact implements JsonSerializable
      *
      * @return bool
      */
-    public function __isset($name)
+    public function __isset($name): bool
     {
         return $this->issetFieldValue($name);
     }
@@ -81,7 +81,7 @@ class AutopilotContact implements JsonSerializable
      *
      * @return string|null
      */
-    public function getFieldValue($name)
+    public function getFieldValue($name): ?string
     {
         $name = AutopilotField::getFieldName($name);
 
@@ -94,9 +94,8 @@ class AutopilotContact implements JsonSerializable
      * @param $value
      *
      * @return string|null
-     * @throws AutopilotException
      */
-    public function setFieldValue($name, $value)
+    public function setFieldValue($name, $value): ?string
     {
         $name = AutopilotField::getFieldName($name);
 
@@ -130,7 +129,7 @@ class AutopilotContact implements JsonSerializable
      *
      * @return bool
      */
-    public function issetFieldValue($name)
+    public function issetFieldValue($name): bool
     {
         $name = AutopilotField::getFieldName($name);
 
@@ -142,7 +141,7 @@ class AutopilotContact implements JsonSerializable
      *
      * @return array
      */
-    public function getAllContactLists()
+    public function getAllContactLists(): array
     {
         return $this->lists;
     }
@@ -154,7 +153,7 @@ class AutopilotContact implements JsonSerializable
      *
      * @return bool
      */
-    public function hasList($list)
+    public function hasList($list): bool
     {
         return in_array($list, $this->lists);
     }
@@ -166,7 +165,7 @@ class AutopilotContact implements JsonSerializable
      *
      * @return $this
      */
-    public function fill(array $options = [])
+    public function fill(array $options = []): AutopilotContact
     {
         foreach($options as $key => $value) {
             if ($key === 'custom_fields') {
@@ -192,7 +191,7 @@ class AutopilotContact implements JsonSerializable
      *
      * @return array
      */
-    public function toRequest($prependKey = true)
+    public function toRequest(bool $prependKey = true): array
     {
         $result = [
             'custom' => []
@@ -220,7 +219,7 @@ class AutopilotContact implements JsonSerializable
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $result = [];
 
@@ -237,7 +236,7 @@ class AutopilotContact implements JsonSerializable
      *
      * @return array
      */
-    function jsonSerialize()
+    function jsonSerialize(): array
     {
         return $this->toArray();
     }

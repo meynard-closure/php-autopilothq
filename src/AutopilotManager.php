@@ -33,10 +33,10 @@ class AutopilotManager
      *
      * @param string $apiKey
      *   Autopilot secret key.
-     * @param string $apiHost
+     * @param string|null $apiHost
      *   Autopilot host URI.
      */
-    public function __construct($apiKey, $apiHost = null, Client $client = null)
+    public function __construct(string $apiKey, string $apiHost = null, Client $client = null)
     {
         $this->apiKey = $apiKey;
 
@@ -54,8 +54,9 @@ class AutopilotManager
      * @param $id
      *
      * @return boolean
+     * @throws AutopilotException
      */
-    public function checkContactExists($id)
+    public function checkContactExists($id): bool
     {
         try {
             $response = $this->apiGet('contact/' . $id);
@@ -73,14 +74,13 @@ class AutopilotManager
      * @param $id
      *
      * @return AutopilotContact
+     * @throws AutopilotException
      */
-    public function getContact($id)
+    public function getContact($id): AutopilotContact
     {
         $response = $this->apiGet('contact/' . $id);
 
-        $contact = new AutopilotContact($response);
-
-        return $contact;
+        return new AutopilotContact($response);
     }
 
     /**
@@ -89,7 +89,7 @@ class AutopilotManager
      * @return AutopilotContact
      * @throws AutopilotException
      */
-    public function saveContact(AutopilotContact $contact)
+    public function saveContact(AutopilotContact $contact): AutopilotContact
     {
         $response = $this->apiPost('contact', $contact->toRequest());
 
@@ -104,12 +104,12 @@ class AutopilotManager
 
     /**
      * @param array $contacts
-     * @param bool  $autosplit
+     * @param bool $autosplit
      *
      * @return array
      * @throws AutopilotException
      */
-    public function saveContacts(array $contacts, $autosplit = false)
+    public function saveContacts(array $contacts, bool $autosplit = false): array
     {
         if (! $autosplit && sizeof($contacts) > self::$MAX_UPLOADS) {
             throw AutopilotException::exceededContactsUploadLimit();
@@ -141,7 +141,6 @@ class AutopilotManager
         // update all ids
         /** @var AutopilotContact $contact */
         foreach($contacts as $contact) {
-
             if (! isset($contactIds[$contact->getFieldValue('Email')])) {
                 throw AutopilotException::contactsBulkSaveFailed('contact "' . $contact->getFieldValue('Email') . '" failed to upload');
             }
@@ -156,8 +155,9 @@ class AutopilotManager
      * @param $id
      *
      * @return boolean
+     * @throws AutopilotException
      */
-    public function deleteContact($id)
+    public function deleteContact($id): bool
     {
         $this->apiDelete('contact/' . $id);
 
@@ -168,8 +168,9 @@ class AutopilotManager
      * @param $id
      *
      * @return boolean
+     * @throws AutopilotException
      */
-    public function unsubscribeContact($id)
+    public function unsubscribeContact($id): bool
     {
         $this->apiPost('contact/' . $id . '/unsubscribe');
 
@@ -180,8 +181,9 @@ class AutopilotManager
      * @param $id
      *
      * @return boolean
+     * @throws AutopilotException
      */
-    public function subscribeContact($id)
+    public function subscribeContact($id): bool
     {
         $contact = $this->getContact($id);
         $contact->setFieldValue('unsubscribed', false);
@@ -195,8 +197,9 @@ class AutopilotManager
      * @param $new
      *
      * @return boolean
+     * @throws AutopilotException
      */
-    public function updateContactEmail($old, $new)
+    public function updateContactEmail($old, $new): bool
     {
         $contact = $this->getContact($old);
         $contact->setFieldValue('_NewEmail', $new);
@@ -215,7 +218,7 @@ class AutopilotManager
      * @return array
      * @throws AutopilotException
      */
-    public function getAllLists()
+    public function getAllLists(): array
     {
         $response = $this->apiGet('lists');
 
@@ -236,7 +239,7 @@ class AutopilotManager
      * @return array
      * @throws AutopilotException
      */
-    public function createList($name)
+    public function createList($name): array
     {
         $response = $this->apiPost('list', [
             'name' => $name,
@@ -456,7 +459,7 @@ class AutopilotManager
 
     /**
      * Add REST hook
-     * 
+     *
      * @param string $event
      * @param string $targetUrl
      *
@@ -479,10 +482,10 @@ class AutopilotManager
      * @param string $hookId
      *
      * @return bool
-     * 
+     *
      * @throws AutopilotException
      */
-    public function deleteRestHook($hookId) 
+    public function deleteRestHook($hookId)
     {
         $this->apiDelete('hook/' . $hookId);
 

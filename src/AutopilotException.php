@@ -66,7 +66,7 @@ class AutopilotException extends Exception
      *
      * @return string
      */
-    public function getAction()
+    public function getAction(): string
     {
         return $this->action;
     }
@@ -76,7 +76,7 @@ class AutopilotException extends Exception
      *
      * @return string
      */
-    public function getReason()
+    public function getReason(): string
     {
         return $this->reason;
     }
@@ -98,7 +98,7 @@ class AutopilotException extends Exception
      *
      * @return string
      */
-    public function getResource()
+    public function getResource(): string
     {
         return $this->resource;
     }
@@ -108,7 +108,7 @@ class AutopilotException extends Exception
      *
      * @return string
      */
-    public function getResponse()
+    public function getResponse(): string
     {
         return $this->response;
     }
@@ -118,7 +118,7 @@ class AutopilotException extends Exception
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -176,7 +176,7 @@ class AutopilotException extends Exception
      *
      * @return static
      */
-    public static function fromExisting(Exception $e)
+    public static function fromExisting(Exception $e): AutopilotException
     {
         return new static($e->getMessage(), $e->getCode(), $e->getPrevious());
     }
@@ -186,7 +186,7 @@ class AutopilotException extends Exception
      *
      * @return static
      */
-    public static function missingApiKey()
+    public static function missingApiKey(): AutopilotException
     {
         return new static('api key for autopilot is not defined');
     }
@@ -199,7 +199,7 @@ class AutopilotException extends Exception
      *
      * @return static
      */
-    public static function cannotOverwriteContactId($original = null, $new = null)
+    public static function cannotOverwriteContactId($original = null, $new = null): AutopilotException
     {
         return new static('saved contact id is different from current contact id');
     }
@@ -209,7 +209,7 @@ class AutopilotException extends Exception
      *
      * @return static
      */
-    public static function exceededContactsUploadLimit()
+    public static function exceededContactsUploadLimit(): AutopilotException
     {
         return new static('maximum contact upload is 100');
     }
@@ -219,7 +219,7 @@ class AutopilotException extends Exception
      *
      * @return static
      */
-    public static function invalidContactType()
+    public static function invalidContactType(): AutopilotException
     {
         return new static('contacts must be of type "AutopilotContact"');
     }
@@ -231,7 +231,7 @@ class AutopilotException extends Exception
      *
      * @return static
      */
-    public static function contactsBulkSaveFailed($message = null)
+    public static function contactsBulkSaveFailed($message = null): AutopilotException
     {
         return new static('contacts bulk upload failed' . (is_null($message) ? '' : ': ' . $message));
     }
@@ -243,7 +243,7 @@ class AutopilotException extends Exception
      *
      * @return static
      */
-    public static function invalidAutopilotType($type = null)
+    public static function invalidAutopilotType($type = null): AutopilotException
     {
         return new static((is_null($type) ? 'Invalid data type.' : '"' . $type . '" is not a valid Autopilot data type'));
     }
@@ -256,7 +256,7 @@ class AutopilotException extends Exception
      *
      * @return static
      */
-    public static function typeMismatch($expected, $type = null)
+    public static function typeMismatch($expected, $type = null): AutopilotException
     {
         return new static('Type value mismatch! Expected: ' . $expected . (is_null($type) ? '' : ', got: '. $type));
     }
